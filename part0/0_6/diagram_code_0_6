@@ -1,0 +1,12 @@
+title Exercise 0.6
+note over browser:
+JSON payload with content and
+date gets sent to the server (POST)
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: 201 Created - Resource was successfully created
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
