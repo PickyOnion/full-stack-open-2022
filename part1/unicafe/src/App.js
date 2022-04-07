@@ -16,6 +16,34 @@ const StatisticItem = (props) => {
   );
 };
 
+const Statistics = (props) => {
+  return (
+    <>
+      <h1>statistics</h1>
+      <StatisticItem statName="good" feedbackState={props.good} />
+      <StatisticItem statName="neutral" feedbackState={props.neutral} />
+      <StatisticItem statName="bad" feedbackState={props.bad} />
+      <StatisticItem
+        statName="all"
+        feedbackState={props.good + props.neutral + props.bad}
+      />
+      <StatisticItem
+        statName="average"
+        feedbackState={
+          (props.good * 1 + props.neutral * 0 + props.bad * -1) /
+          (props.good + props.neutral + props.bad)
+        }
+      />
+      <StatisticItem
+        statName="positive"
+        feedbackState={
+          (props.good / (props.good + props.neutral + props.bad)) * 100 + " %"
+        }
+      />
+    </>
+  );
+};
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0);
@@ -43,10 +71,7 @@ const App = () => {
         }}
         buttonText="bad"
       />
-      <h1>statistics</h1>
-      <StatisticItem statName="good" feedbackState={good} />
-      <StatisticItem statName="neutral" feedbackState={neutral} />
-      <StatisticItem statName="bad" feedbackState={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
