@@ -17,31 +17,40 @@ const StatisticItem = (props) => {
 };
 
 const Statistics = (props) => {
-  return (
-    <>
-      <h1>statistics</h1>
-      <StatisticItem statName="good" feedbackState={props.good} />
-      <StatisticItem statName="neutral" feedbackState={props.neutral} />
-      <StatisticItem statName="bad" feedbackState={props.bad} />
-      <StatisticItem
-        statName="all"
-        feedbackState={props.good + props.neutral + props.bad}
-      />
-      <StatisticItem
-        statName="average"
-        feedbackState={
-          (props.good * 1 + props.neutral * 0 + props.bad * -1) /
-          (props.good + props.neutral + props.bad)
-        }
-      />
-      <StatisticItem
-        statName="positive"
-        feedbackState={
-          (props.good / (props.good + props.neutral + props.bad)) * 100 + " %"
-        }
-      />
-    </>
-  );
+  if (props.total === 0) {
+    return (
+      <>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <h1>statistics</h1>
+        <StatisticItem statName="good" feedbackState={props.good} />
+        <StatisticItem statName="neutral" feedbackState={props.neutral} />
+        <StatisticItem statName="bad" feedbackState={props.bad} />
+        <StatisticItem
+          statName="all"
+          feedbackState={props.good + props.neutral + props.bad}
+        />
+        <StatisticItem
+          statName="average"
+          feedbackState={
+            (props.good * 1 + props.neutral * 0 + props.bad * -1) /
+            (props.good + props.neutral + props.bad)
+          }
+        />
+        <StatisticItem
+          statName="positive"
+          feedbackState={
+            (props.good / (props.good + props.neutral + props.bad)) * 100 + " %"
+          }
+        />
+      </>
+    );
+  }
 };
 
 const App = () => {
@@ -71,7 +80,12 @@ const App = () => {
         }}
         buttonText="bad"
       />
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={good + neutral + bad}
+      />
     </div>
   );
 };
