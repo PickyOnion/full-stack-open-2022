@@ -8,7 +8,7 @@ const Button = (props) => {
   );
 };
 
-const StatisticItem = (props) => {
+const StatisticLine = (props) => {
   return (
     <p>
       {props.statName} {props.feedbackState}
@@ -28,21 +28,21 @@ const Statistics = (props) => {
     return (
       <>
         <h1>statistics</h1>
-        <StatisticItem statName="good" feedbackState={props.good} />
-        <StatisticItem statName="neutral" feedbackState={props.neutral} />
-        <StatisticItem statName="bad" feedbackState={props.bad} />
-        <StatisticItem
+        <StatisticLine statName="good" feedbackState={props.good} />
+        <StatisticLine statName="neutral" feedbackState={props.neutral} />
+        <StatisticLine statName="bad" feedbackState={props.bad} />
+        <StatisticLine
           statName="all"
           feedbackState={props.good + props.neutral + props.bad}
         />
-        <StatisticItem
+        <StatisticLine
           statName="average"
           feedbackState={
             (props.good * 1 + props.neutral * 0 + props.bad * -1) /
             (props.good + props.neutral + props.bad)
           }
         />
-        <StatisticItem
+        <StatisticLine
           statName="positive"
           feedbackState={
             (props.good / (props.good + props.neutral + props.bad)) * 100 + " %"
