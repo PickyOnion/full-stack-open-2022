@@ -10,9 +10,10 @@ const Button = (props) => {
 
 const StatisticLine = (props) => {
   return (
-    <p>
-      {props.statName} {props.feedbackState}
-    </p>
+    <tr>
+      <td>{props.statName}</td>
+      <td>{props.feedbackState}</td>
+    </tr>
   );
 };
 
@@ -28,26 +29,31 @@ const Statistics = (props) => {
     return (
       <>
         <h1>statistics</h1>
-        <StatisticLine statName="good" feedbackState={props.good} />
-        <StatisticLine statName="neutral" feedbackState={props.neutral} />
-        <StatisticLine statName="bad" feedbackState={props.bad} />
-        <StatisticLine
-          statName="all"
-          feedbackState={props.good + props.neutral + props.bad}
-        />
-        <StatisticLine
-          statName="average"
-          feedbackState={
-            (props.good * 1 + props.neutral * 0 + props.bad * -1) /
-            (props.good + props.neutral + props.bad)
-          }
-        />
-        <StatisticLine
-          statName="positive"
-          feedbackState={
-            (props.good / (props.good + props.neutral + props.bad)) * 100 + " %"
-          }
-        />
+        <table>
+          <tbody>
+            <StatisticLine statName="good" feedbackState={props.good} />
+            <StatisticLine statName="neutral" feedbackState={props.neutral} />
+            <StatisticLine statName="bad" feedbackState={props.bad} />
+            <StatisticLine
+              statName="all"
+              feedbackState={props.good + props.neutral + props.bad}
+            />
+            <StatisticLine
+              statName="average"
+              feedbackState={
+                (props.good * 1 + props.neutral * 0 + props.bad * -1) /
+                (props.good + props.neutral + props.bad)
+              }
+            />
+            <StatisticLine
+              statName="positive"
+              feedbackState={
+                (props.good / (props.good + props.neutral + props.bad)) * 100 +
+                " %"
+              }
+            />
+          </tbody>
+        </table>
       </>
     );
   }
