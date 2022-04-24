@@ -19,7 +19,12 @@ const App = () => {
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients",
   ];
 
+  const fillArray = (length, number) => {
+    return Array(length).fill(number);
+  };
+
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(fillArray(anecdotes.length, 0));
 
   // generate random int from 0 to arr.length and shoot it to useState
 
@@ -28,18 +33,37 @@ const App = () => {
     let rand = Math.random();
     rand = Math.floor(rand * difference);
     rand = rand + min;
-    console.log(rand);
     return rand;
+  };
+
+  const handleVotes = () => {
+    const voteCopy = [...votes];
+    voteCopy[selected] += 1;
+    setVotes(voteCopy);
+  };
+
+  // need to the array by max votes and extract index
+
+  const getMostVoted = () => {
+    const max = Math.max(...votes);
+    return votes.indexOf(max);
   };
 
   return (
     <>
+      <h2>Anecdote of the day</h2>
       <div>{anecdotes[selected]}</div>
       <br></br>
+      <p>votes: {votes[selected]}</p>
+      <Button buttonText="vote" onClick={handleVotes} />
       <Button
         buttonText="next anecdote"
         onClick={() => setSelected(generateRandomInt(0, anecdotes.length))}
-      ></Button>
+      />
+      <h2>Anecdote with most votes</h2>
+      <div>{anecdotes[getMostVoted()]}</div>
+      <br></br>
+      <p>votes: {votes[getMostVoted()]}</p>
     </>
   );
 };
