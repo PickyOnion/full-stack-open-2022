@@ -1,34 +1,48 @@
 import { useState } from "react";
 
-const Person = (props) => <p>{props.props.name}</p>;
+const Person = (props) => (
+  <p>
+    {props.props.name} {props.props.number}
+  </p>
+);
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-12345667" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const addPerson = (event) => {
     event.preventDefault();
 
     const numberObject = {
       name: newName,
+      number: newNumber,
     };
 
     const isDifferentObject = (object1) =>
-      JSON.stringify(object1) !== JSON.stringify(numberObject);
+      JSON.stringify(object1.name) !== JSON.stringify(numberObject.name);
 
-    if (newName !== "") {
+    if (newName !== "" && newNumber !== "") {
       if (persons.every(isDifferentObject)) {
         setPersons(persons.concat(numberObject));
         setNewName("");
+        setNewNumber("");
       } else {
         alert(`${newName} is already added to phonebook`);
         setNewName("");
+        setNewNumber("");
       }
     }
   };
 
-  const handlePersonChange = (event) => {
+  const handleNameChange = (event) => {
     setNewName(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   return (
@@ -36,7 +50,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} onChange={handlePersonChange} />
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
         </div>
         <div>
           <button type="submit">add</button>
