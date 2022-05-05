@@ -8,13 +8,23 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+
     const numberObject = {
       name: newName,
-      // id: persons.length + 1,
     };
 
-    setPersons(persons.concat(numberObject));
-    setNewName("");
+    const isDifferentObject = (object1) =>
+      JSON.stringify(object1) !== JSON.stringify(numberObject);
+
+    if (newName !== "") {
+      if (persons.every(isDifferentObject)) {
+        setPersons(persons.concat(numberObject));
+        setNewName("");
+      } else {
+        alert(`${newName} is already added to phonebook`);
+        setNewName("");
+      }
+    }
   };
 
   const handlePersonChange = (event) => {
