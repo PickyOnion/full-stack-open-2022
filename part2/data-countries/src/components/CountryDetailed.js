@@ -1,3 +1,5 @@
+import Weather from "./Weather";
+
 const CountryDetailed = (props) => {
   console.log(props.props.languages);
   return (
@@ -16,6 +18,7 @@ const CountryDetailed = (props) => {
       ))}
       <br></br>
       <img src={props.props.flags.png} alt="flag" width="160" />
+      <Weather props={props.props} />
     </>
   );
 };

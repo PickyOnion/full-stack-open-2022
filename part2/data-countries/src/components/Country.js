@@ -1,5 +1,3 @@
-import CountryDetailed from "./CountryDetailed";
-
 function Country(props) {
   return (
     <li>
