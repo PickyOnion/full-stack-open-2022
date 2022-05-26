@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Filter from "./components/Filter";
 import Country from "./components/Country";
 import CountryDetailed from "./components/CountryDetailed";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("");
+
+  const handleClick = (name) => {
+    // console.log(name);
+    setFilter(name);
+  };
 
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all").then((response) => {
@@ -31,7 +35,13 @@ function App() {
       return <p>Too many matches, specify another filter</p>;
     } else {
       return filteredCountries.map((country) => (
-        <Country key={country.name.common} props={country} />
+        <>
+          <Country
+            key={country.name.common}
+            props={country}
+            onClick={() => handleClick(country.name.common)}
+          />
+        </>
       ));
     }
   }
