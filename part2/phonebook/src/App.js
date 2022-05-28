@@ -33,9 +33,13 @@ const App = () => {
 
     if (newName !== "" && newNumber !== "") {
       if (persons.every(isDifferentObject)) {
-        setPersons(persons.concat(numberObject));
-        setNewName("");
-        setNewNumber("");
+        axios
+          .post("http://localhost:3001/persons", numberObject)
+          .then((response) => {
+            setPersons(persons.concat(numberObject));
+            setNewName("");
+            setNewNumber("");
+          });
       } else {
         alert(`${newName} is already added to phonebook`);
         setNewName("");
