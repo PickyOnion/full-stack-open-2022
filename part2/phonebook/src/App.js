@@ -58,6 +58,14 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
+  const handleDelete = (id) => {
+    if (window.confirm("Do you really want to leave?")) {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter((removedPerson) => removedPerson.id !== id));
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -72,7 +80,11 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {filteredPersons.map((person) => (
-        <Person key={person.name} props={person} />
+        <Person
+          key={person.id}
+          props={person}
+          onClick={() => handleDelete(person.id)}
+        />
       ))}
     </div>
   );
