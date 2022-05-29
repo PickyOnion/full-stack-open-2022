@@ -38,8 +38,15 @@ const App = () => {
           setNewName("");
           setNewNumber("");
         });
+        // } else {
+        //   alert(`${newName} is already added to phonebook`);
+        //   setNewName("");
+        //   setNewNumber("");
+        // }
       } else {
-        alert(`${newName} is already added to phonebook`);
+        alert(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        );
         setNewName("");
         setNewNumber("");
       }
@@ -58,8 +65,8 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Do you really want to leave?")) {
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
       personService.remove(id).then(() => {
         setPersons(persons.filter((removedPerson) => removedPerson.id !== id));
       });
@@ -83,7 +90,7 @@ const App = () => {
         <Person
           key={person.id}
           props={person}
-          onClick={() => handleDelete(person.id)}
+          onClick={() => handleDelete(person.id, person.name)}
         />
       ))}
     </div>
