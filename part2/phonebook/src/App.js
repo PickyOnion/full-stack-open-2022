@@ -38,17 +38,32 @@ const App = () => {
           setNewName("");
           setNewNumber("");
         });
-        // } else {
-        //   alert(`${newName} is already added to phonebook`);
-        //   setNewName("");
-        //   setNewNumber("");
-        // }
       } else {
-        alert(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        );
-        setNewName("");
-        setNewNumber("");
+        if (
+          window.confirm(
+            `${newName} is already added to phonebook, replace the old number with a new one?`
+          )
+        ) {
+          const findPerson = persons.find((p) => p.name === numberObject.name);
+          console.log("findPerson", findPerson);
+          const changedPerson = { ...findPerson, number: newNumber };
+          console.log("changedPerson", changedPerson);
+
+          personService
+            .update(changedPerson.id, changedPerson)
+            .then((returnedPerson) => {
+              console.log("returnedPerson", returnedPerson);
+              setPersons(
+                persons.map((findPerson) =>
+                  findPerson.id !== changedPerson.id
+                    ? findPerson
+                    : returnedPerson
+                )
+              );
+            });
+          setNewName("");
+          setNewNumber("");
+        }
       }
     }
   };
