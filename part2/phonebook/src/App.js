@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
   const [confirmationMessage, setConfirmationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -40,8 +41,10 @@ const App = () => {
           setNewName("");
           setNewNumber("");
           setConfirmationMessage(`Added ${newName}`);
+          setNotificationType("confirmation");
           setTimeout(() => {
             setConfirmationMessage(null);
+            setNotificationType(null);
           }, 5000);
         });
       } else {
@@ -66,13 +69,27 @@ const App = () => {
                     : returnedPerson
                 )
               );
+            })
+            .catch((error) => {
+              setNewName("");
+              setNewNumber("");
+              setConfirmationMessage(
+                `Information of ${changedPerson.name} has already been removed from server`
+              );
+              setNotificationType("error");
+              setTimeout(() => {
+                setConfirmationMessage(null);
+                setNotificationType(null);
+              }, 5000);
             });
 
           setNewName("");
           setNewNumber("");
           setConfirmationMessage(`Updated ${newName}`);
+          setNotificationType("confirmation");
           setTimeout(() => {
             setConfirmationMessage(null);
+            setNotificationType(null);
           }, 5000);
         }
       }
@@ -102,7 +119,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={confirmationMessage} />
+      <Notification
+        message={confirmationMessage}
+        notificationType={notificationType}
+      />
       <Filter value={newFilter} onChange={handleFilterChange} />
       <h2>Add new contact</h2>
       <PersonForm

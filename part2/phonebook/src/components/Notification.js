@@ -1,9 +1,9 @@
-const Notification = ({ message }) => {
+const Notification = ({ message, notificationType }) => {
   if (message === null) {
     return null;
   }
-
-  return <div className="confirmation">{message}</div>;
+// classname should be either confirmation or error
+  return <div className={notificationType}>{message}</div>;
 };
 
 export default Notification;
