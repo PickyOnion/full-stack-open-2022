@@ -21,8 +21,8 @@ const customMorgan = morgan(function (tokens, req, res) {
   ].join(" ");
 });
 
+app.use(express.static("build"));
 app.use(express.json());
-// app.use(morgan("tiny"));
 app.use(customMorgan);
 
 let persons = [
