@@ -51,6 +51,7 @@ app.get("/info", (request, response) => {
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons);
+    console.log("rtedsst");
   });
 });
 
@@ -72,30 +73,51 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
+// app.post("/api/persons", (request, response) => {
+//   const body = request.body;
+
+//   const existingPerson = persons.find((person) => person.name === body.name);
+
+//   if (!body.name || !body.number) {
+//     return response.status(400).json({
+//       error: "name or number is missing",
+//     });
+//   } else if (existingPerson) {
+//     return response.status(400).json({
+//       error: "name must be unique",
+//     });
+//   }
+
+//   const person = {
+//     id: generateId(1, 10000000000),
+//     name: body.name,
+//     number: body.number,
+//   };
+
+//   persons = persons.concat(person);
+
+//   response.json(person);
+// });
+
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-
-  const existingPerson = persons.find((person) => person.name === body.name);
 
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: "name or number is missing",
     });
-  } else if (existingPerson) {
-    return response.status(400).json({
-      error: "name must be unique",
-    });
   }
 
-  const person = {
-    id: generateId(1, 10000000000),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  persons = persons.concat(person);
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 
-  response.json(person);
+  // response.json(person);
 });
 
 const PORT = process.env.PORT || 3001;
