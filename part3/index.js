@@ -27,12 +27,6 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(customMorgan);
 
-function generateId(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
-}
-
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
@@ -44,14 +38,9 @@ app.get("/info", (request, response) => {
     <p>${new Date()}</p>`);
 });
 
-// app.get("/api/persons", (request, response) => {
-//   response.json(persons);
-// });
-
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons);
-    console.log("rtedsst");
   });
 });
 
@@ -73,31 +62,13 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
-// app.post("/api/persons", (request, response) => {
-//   const body = request.body;
-
-//   const existingPerson = persons.find((person) => person.name === body.name);
-
-//   if (!body.name || !body.number) {
-//     return response.status(400).json({
-//       error: "name or number is missing",
-//     });
-//   } else if (existingPerson) {
-//     return response.status(400).json({
-//       error: "name must be unique",
-//     });
-//   }
-
-//   const person = {
-//     id: generateId(1, 10000000000),
-//     name: body.name,
-//     number: body.number,
-//   };
-
-//   persons = persons.concat(person);
-
-//   response.json(person);
-// });
+app.delete("/api/persons/:id", (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
+});
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
@@ -116,8 +87,6 @@ app.post("/api/persons", (request, response) => {
   person.save().then((savedPerson) => {
     response.json(savedPerson);
   });
-
-  // response.json(person);
 });
 
 const PORT = process.env.PORT || 3001;
