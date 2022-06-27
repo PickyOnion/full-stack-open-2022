@@ -51,6 +51,14 @@ const App = () => {
           })
           .catch((error) => {
             console.log(error.response.data.error);
+            setNewName("");
+            setNewNumber("");
+            setConfirmationMessage(error.response.data.error);
+            setNotificationType("error");
+            setTimeout(() => {
+              setConfirmationMessage(null);
+              setNotificationType(null);
+            }, 5000);
           });
       } else {
         if (
