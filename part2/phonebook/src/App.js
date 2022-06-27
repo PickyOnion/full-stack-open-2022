@@ -36,17 +36,29 @@ const App = () => {
 
     if (newName !== "" && newNumber !== "") {
       if (persons.every(isDifferentObject)) {
-        personService.create(numberObject).then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
-          setConfirmationMessage(`Added ${newName}`);
-          setNotificationType("confirmation");
-          setTimeout(() => {
-            setConfirmationMessage(null);
-            setNotificationType(null);
-          }, 5000);
-        });
+        personService
+          .create(numberObject)
+          .then((returnedPerson) => {
+            setPersons(persons.concat(returnedPerson));
+            setNewName("");
+            setNewNumber("");
+            setConfirmationMessage(`Added ${newName}`);
+            setNotificationType("confirmation");
+            setTimeout(() => {
+              setConfirmationMessage(null);
+              setNotificationType(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setNewName("");
+            setNewNumber("");
+            setConfirmationMessage(error.response.data);
+            setNotificationType("error");
+            setTimeout(() => {
+              setConfirmationMessage(null);
+              setNotificationType(null);
+            }, 5000);
+          });
       } else {
         if (
           window.confirm(
