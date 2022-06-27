@@ -50,14 +50,7 @@ const App = () => {
             }, 5000);
           })
           .catch((error) => {
-            setNewName("");
-            setNewNumber("");
-            setConfirmationMessage(error.response.data);
-            setNotificationType("error");
-            setTimeout(() => {
-              setConfirmationMessage(null);
-              setNotificationType(null);
-            }, 5000);
+            console.log(error.response.data);
           });
       } else {
         if (
