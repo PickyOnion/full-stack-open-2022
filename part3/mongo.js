@@ -12,8 +12,8 @@ const password = process.argv[2];
 const url = `mongodb+srv://nicolasmessmer:${password}@cluster0.f0cdk.mongodb.net/?retryWrites=true&w=majority`;
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: { type: String, minLength: 3, required: true },
+  number: { type: String, required: true },
 });
 
 const Person = mongoose.model("Person", personSchema);
