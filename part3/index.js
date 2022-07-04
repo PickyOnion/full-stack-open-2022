@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const app = express();
 const Person = require("./models/person");
 
-morgan.token("body", function (req, res) {
+morgan.token("body", function (req) {
   if (req.method === "POST") {
     return JSON.stringify(req.body);
   }
@@ -29,15 +29,17 @@ app.use(customMorgan);
 
 // CRUD operations
 
-app.get("/", (request, response) => {
+app.get("/", (response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
 app.get("/info", (request, response) => {
-  response.status(200).send(`<p>Phonebook has info for ${
-    persons.length
-  } people</p>
-    <p>${new Date()}</p>`);
+  Person.find({}).then((persons) => {
+    response.status(200).send(`<p>Phonebook has info for ${
+      persons.length
+    } people</p>
+      <p>${new Date()}</p>`);
+  });
 });
 
 app.get("/api/persons", (request, response) => {
@@ -48,7 +50,7 @@ app.get("/api/persons", (request, response) => {
 
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
