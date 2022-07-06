@@ -7,7 +7,7 @@ test("dummy returns one", () => {
   expect(result).toBe(1);
 });
 
-describe("total likes", () => {
+describe("total likes & most likes", () => {
   const blogs = [
     {
       _id: "5a422a851b54a676234d17f7",
@@ -85,5 +85,17 @@ describe("total likes", () => {
   test("of a bigger list is calculated right", () => {
     const result = listHelper.totalLikes(blogs);
     expect(result).toBe(36);
+  });
+
+  test("of a list sorted desc by post likes", () => {
+    const result = listHelper.favoriteBlog(blogs);
+    expect(result).toEqual({
+      _id: "5a422b3a1b54a676234d17f9",
+      title: "Canonical string reduction",
+      author: "Edsger W. Dijkstra",
+      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+      likes: 12,
+      __v: 0,
+    });
   });
 });
