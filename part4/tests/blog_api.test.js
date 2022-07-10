@@ -39,6 +39,11 @@ test("there are two blog posts", async () => {
   expect(response.body).toHaveLength(2);
 });
 
+test("unique identifier ID is defined", async () => {
+  const response = await api.get("/api/blogs");
+  expect(response.body[0].id).toBeDefined();
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
