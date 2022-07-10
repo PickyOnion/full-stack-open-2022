@@ -3,6 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const helper = require("./test_helper");
 
 const initialPosts = [
   {
@@ -42,6 +43,27 @@ test("there are two blog posts", async () => {
 test("unique identifier ID is defined", async () => {
   const response = await api.get("/api/blogs");
   expect(response.body[0].id).toBeDefined();
+});
+
+test("blog is saved in the db", async () => {
+  const newBlogObject = {
+    title: "Check if everything works well",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlogObject)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd).toHaveLength(initialPosts.length + 1);
+
+  const titles = blogsAtEnd.map((n) => n.title);
+  expect(titles).toContain("Check if everything works well");
 });
 
 afterAll(() => {
