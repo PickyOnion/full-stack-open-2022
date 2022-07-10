@@ -66,6 +66,17 @@ test("blog is saved in the db", async () => {
   expect(titles).toContain("Check if everything works well");
 });
 
+test("verifies that if the likes property is missing from the request and sets to 0 by default", async () => {
+  const newBlogObject = {
+    title: "Check if likes are set to 0",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+  };
+
+  response = await api.post("/api/blogs").send(newBlogObject);
+  expect(response.body.likes).toEqual(0);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
