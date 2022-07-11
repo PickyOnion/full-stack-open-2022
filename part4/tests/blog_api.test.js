@@ -103,7 +103,51 @@ describe("deletion of a blog post", () => {
   });
 
   test("fails with 400 if id is invalid", async () => {
-    await api.delete(`/api/blogs/sadhjfaldskubf`).expect(400);
+    await api.delete("/api/blogs/sadhjfaldskubf").expect(400);
+  });
+});
+
+describe("update of a blog post", () => {
+  test("succeeds with status code 201 if blog is updated", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    updatedBody = {
+      title: "React patterns - updated",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+    };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBody)
+      .expect(201);
+  });
+
+  test("response has been updated", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    updatedBody = {
+      title: "React patterns - updated",
+      author: "Michael Chan - updated",
+      url: "https://reactpatterns.com/updated",
+      likes: 8,
+    };
+
+    console.log(blogToUpdate.id);
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBody);
+
+    console.log(response.body);
+
+    expect(response.body.title).toBe("React patterns - updated");
+    expect(response.body.author).toContain("Michael Chan - updated");
+    expect(response.body.url).toContain("https://reactpatterns.com/updated");
+    expect(response.body.likes).toEqual(8);
   });
 });
 
