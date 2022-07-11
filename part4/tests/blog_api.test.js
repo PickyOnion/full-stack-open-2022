@@ -77,6 +77,15 @@ test("verifies that if the likes property is missing from the request and sets t
   expect(response.body.likes).toEqual(0);
 });
 
+test("verifies that missing title and url return 400", async () => {
+  const newBlogObject = {
+    author: "Michael Chan",
+  };
+
+  response = await api.post("/api/blogs").send(newBlogObject);
+  expect(400);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
