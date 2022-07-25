@@ -3,6 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const helper = require("./test_helper");
 
 const initialPosts = [
@@ -20,28 +21,45 @@ const initialPosts = [
   },
 ];
 
+let token;
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   let postObject = new Blog(initialPosts[0]);
   await postObject.save();
   postObject = new Blog(initialPosts[1]);
   await postObject.save();
+  await User.deleteMany({});
+
+  await api.post("/api/users").send(helper.initialUser);
+
+  const response = await api.post("/api/login").send({
+    username: helper.initialUser.username,
+    password: helper.initialUser.password,
+  });
+  token = response.body.token;
+  console.log("response.body.token", response.body.token);
 });
 
 test("posts are returned as json", async () => {
   await api
     .get("/api/blogs")
+    .set("authorization", `bearer ${token}`)
     .expect(200)
     .expect("Content-Type", /application\/json/);
 });
 
 test("there are two blog posts", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("authorization", `bearer ${token}`);
   expect(response.body).toHaveLength(2);
 });
 
 test("unique identifier ID is defined", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await api
+    .get("/api/blogs")
+    .set("authorization", `bearer ${token}`);
   expect(response.body[0].id).toBeDefined();
 });
 
@@ -56,6 +74,7 @@ test("blog is saved in the db", async () => {
   await api
     .post("/api/blogs")
     .send(newBlogObject)
+    .set("authorization", `bearer ${token}`)
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
@@ -73,7 +92,10 @@ test("verifies that if the likes property is missing from the request and sets t
     url: "https://reactpatterns.com/",
   };
 
-  response = await api.post("/api/blogs").send(newBlogObject);
+  response = await api
+    .post("/api/blogs")
+    .send(newBlogObject)
+    .set("authorization", `bearer ${token}`);
   expect(response.body.likes).toEqual(0);
 });
 
@@ -82,7 +104,10 @@ test("verifies that missing title and url return 400", async () => {
     author: "Michael Chan",
   };
 
-  response = await api.post("/api/blogs").send(newBlogObject);
+  response = await api
+    .post("/api/blogs")
+    .send(newBlogObject)
+    .set("authorization", `bearer ${token}`);
   expect(400);
 });
 
@@ -91,7 +116,10 @@ describe("deletion of a blog post", () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set("authorization", `bearer ${token}`)
+      .expect(204);
 
     const blogsAtEnd = await helper.blogsInDb();
 
@@ -103,7 +131,10 @@ describe("deletion of a blog post", () => {
   });
 
   test("fails with 400 if id is invalid", async () => {
-    await api.delete("/api/blogs/sadhjfaldskubf").expect(400);
+    await api
+      .delete("/api/blogs/sadhjfaldskubf")
+      .set("authorization", `bearer ${token}`)
+      .expect(400);
   });
 });
 
@@ -122,6 +153,7 @@ describe("update of a blog post", () => {
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBody)
+      .set("authorization", `bearer ${token}`)
       .expect(201);
   });
 
@@ -140,7 +172,8 @@ describe("update of a blog post", () => {
 
     const response = await api
       .put(`/api/blogs/${blogToUpdate.id}`)
-      .send(updatedBody);
+      .send(updatedBody)
+      .set("authorization", `bearer ${token}`);
 
     console.log(response.body);
 
