@@ -19,6 +19,12 @@ const initialPosts = [
     url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     likes: 5,
   },
+  {
+    title: "Delete this please",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    likes: 5,
+  },
 ];
 
 let token;
@@ -31,14 +37,19 @@ beforeEach(async () => {
   await postObject.save();
   await User.deleteMany({});
 
-  await api.post("/api/users").send(helper.initialUser);
+  const userResponse = await api.post("/api/users").send(helper.initialUser);
+  const createdUserId = userResponse.body.id;
+
+  const updatedThirdBlog = { ...initialPosts[2], user: createdUserId };
 
   const response = await api.post("/api/login").send({
     username: helper.initialUser.username,
     password: helper.initialUser.password,
   });
   token = response.body.token;
-  console.log("response.body.token", response.body.token);
+
+  postObject = new Blog(updatedThirdBlog);
+  await postObject.save();
 });
 
 test("posts are returned as json", async () => {
@@ -53,7 +64,7 @@ test("there are two blog posts", async () => {
   const response = await api
     .get("/api/blogs")
     .set("authorization", `bearer ${token}`);
-  expect(response.body).toHaveLength(2);
+  expect(response.body).toHaveLength(3);
 });
 
 test("unique identifier ID is defined", async () => {
@@ -92,11 +103,12 @@ test("verifies that if the likes property is missing from the request and sets t
     url: "https://reactpatterns.com/",
   };
 
-  response = await api
+  const response = await api
     .post("/api/blogs")
     .send(newBlogObject)
     .set("authorization", `bearer ${token}`);
-  expect(response.body.likes).toEqual(0);
+
+  expect(response.body.blog.likes).toEqual(0);
 });
 
 test("verifies that missing title and url return 400", async () => {
@@ -114,7 +126,11 @@ test("verifies that missing title and url return 400", async () => {
 describe("deletion of a blog post", () => {
   test("succeeds with status code 204 if id is valid", async () => {
     const blogsAtStart = await helper.blogsInDb();
-    const blogToDelete = blogsAtStart[0];
+    console.log("blogsAtStart", blogsAtStart);
+
+    const blogToDelete = blogsAtStart[2];
+
+    console.log("blogToDelete", blogToDelete);
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
@@ -168,14 +184,10 @@ describe("update of a blog post", () => {
       likes: 8,
     };
 
-    console.log(blogToUpdate.id);
-
     const response = await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBody)
       .set("authorization", `bearer ${token}`);
-
-    console.log(response.body);
 
     expect(response.body.title).toBe("React patterns - updated");
     expect(response.body.author).toContain("Michael Chan - updated");
