@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
+import CreateForm from "./components/CreateForm";
 import blogService from "./services/blogs";
 import loginService from "./services/loginService";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -51,25 +51,6 @@ const App = () => {
     setUser(null);
   };
 
-  const addBlog = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newBlog,
-      date: new Date().toISOString(),
-      important: Math.random() > 0.5,
-      id: blogs.length + 1,
-    };
-
-    blogService.create(noteObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
-      setNewBlog("");
-    });
-  };
-
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value);
-  };
-
   const loginForm = () => (
     <div>
       <h2>log in to application</h2>
@@ -97,13 +78,6 @@ const App = () => {
     </div>
   );
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <input value={newBlog} onChange={handleBlogChange} />
-      <button type="submit">save</button>
-    </form>
-  );
-
   if (user === null) {
     return loginForm();
   }
@@ -117,6 +91,7 @@ const App = () => {
           logout
         </button>
       </p>
+      <CreateForm setBlogs={setBlogs}></CreateForm>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
