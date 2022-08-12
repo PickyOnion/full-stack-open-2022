@@ -3,10 +3,11 @@ import Blog from "./components/Blog";
 import CreateForm from "./components/CreateForm";
 import blogService from "./services/blogs";
 import loginService from "./services/loginService";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -39,7 +40,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setErrorMessage("wrong credentials");
+      setErrorMessage("wrong username or password");
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
@@ -54,6 +55,7 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>log in to application</h2>
+      <Notification message={errorMessage} />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -85,13 +87,17 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Notification message={errorMessage} />
       <p>
         {`${user.name} logged in`}
         <button type="submit" onClick={handleLogout}>
           logout
         </button>
       </p>
-      <CreateForm setBlogs={setBlogs}></CreateForm>
+      <CreateForm
+        setBlogs={setBlogs}
+        setErrorMessage={setErrorMessage}
+      ></CreateForm>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}

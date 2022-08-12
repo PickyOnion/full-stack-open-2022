@@ -21,6 +21,16 @@ const CreateForm = (props) => {
     };
     blogService.create(newBlog);
     setNewBlog(newBlog);
+    props.setErrorMessage(
+      `a new blog ${newBlogTitle} by ${newBlogAuthor} added`
+    );
+    setTimeout(() => {
+      props.setErrorMessage(null);
+    }, 5000);
+    setNewBlog("");
+    setNewBlogTitle("");
+    setNewBlogAuthor("");
+    setNewBlogUrl("");
   };
 
   return (
