@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import blogService from "../services/blogs";
 
-const CreateForm = (props) => {
+const CreateForm = forwardRef((props, ref) => {
   const [newBlogTitle, setNewBlogTitle] = useState("");
   const [newBlogAuthor, setNewBlogAuthor] = useState("");
   const [newBlogUrl, setNewBlogUrl] = useState("");
@@ -19,6 +19,7 @@ const CreateForm = (props) => {
       author: newBlogAuthor,
       url: newBlogUrl,
     };
+    ref.current.toggleVisibility();
     blogService.create(newBlog);
     setNewBlog(newBlog);
     props.setErrorMessage(
@@ -68,6 +69,6 @@ const CreateForm = (props) => {
       </form>
     </div>
   );
-};
+});
 
 export default CreateForm;
