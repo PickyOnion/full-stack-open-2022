@@ -1,3 +1,4 @@
+import blogService from "../services/blogs";
 import { useState } from "react";
 
 const Blog = ({ blog }) => {
@@ -17,6 +18,19 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
+  const handleUpvote = async (id) => {
+    const putRequest = {
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    };
+
+    console.log("id", id);
+
+    blogService.update(id, putRequest);
+  };
+
   return (
     <div style={blogStyle}>
       <div>
@@ -28,7 +42,10 @@ const Blog = ({ blog }) => {
       <div style={showWhenVisible}>
         <p>{blog.url}</p>
         <p>
-          {`likes ${blog.likes}`} <button type="submit">like</button>
+          {`likes ${blog.likes}`}{" "}
+          <button type="submit" onClick={() => handleUpvote(blog.id)}>
+            like
+          </button>
         </p>
         {/* <p>{user.name}</p> */}
       </div>
