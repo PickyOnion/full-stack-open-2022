@@ -17,19 +17,19 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
-  // console.log("blog", blog);
-
   return (
     <div style={blogStyle}>
       <div>
         {blog.title} - {blog.author}
         <button type="submit" onClick={toggleVisibility}>
-          view
+          {visible ? "hide" : "view"}
         </button>
       </div>
       <div style={showWhenVisible}>
         <p>{blog.url}</p>
-        <p>{`likes ${blog.likes}`}</p>
+        <p>
+          {`likes ${blog.likes}`} <button type="submit">like</button>
+        </p>
         {/* <p>{user.name}</p> */}
       </div>
     </div>

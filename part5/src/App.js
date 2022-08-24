@@ -17,6 +17,7 @@ const App = () => {
   useEffect(() => {
     if (user !== null) {
       blogService.getAll().then((blogs) => setBlogs(blogs));
+      console.log("loop 1");
     }
   }, [user]);
 
@@ -25,6 +26,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      console.log("loop 2");
       blogService.setToken(user.token);
     }
   }, []);
