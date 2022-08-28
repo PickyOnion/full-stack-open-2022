@@ -1,37 +1,17 @@
-import { useState, useEffect, forwardRef } from "react";
-import blogService from "../services/blogs";
+import { useState } from "react";
 
-const CreateForm = forwardRef((props, ref) => {
-  const [newBlogTitle, setNewBlogTitle] = useState("");
-  const [newBlogAuthor, setNewBlogAuthor] = useState("");
-  const [newBlogUrl, setNewBlogUrl] = useState("");
-  const [newBlog, setNewBlog] = useState({});
+const CreateForm = ({ addBlog }) => {
+  const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => props.setBlogs(blogs));
-  }, [newBlog, props]);
+  const handleFieldChange = (event) => {
+    const { name, value } = event.target;
+    setNewBlog({ ...newBlog, [name]: value });
+  };
 
-  const handleNewBlog = async (event) => {
+  const handleNewBlog = (event) => {
     event.preventDefault();
-    window.localStorage.getItem("loggedBlogappUser");
-    const newBlog = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-    };
-    ref.current.toggleVisibility();
-    blogService.create(newBlog);
-    setNewBlog(newBlog);
-    props.setErrorMessage(
-      `a new blog ${newBlogTitle} by ${newBlogAuthor} added`
-    );
-    setTimeout(() => {
-      props.setErrorMessage(null);
-    }, 5000);
-    setNewBlog("");
-    setNewBlogTitle("");
-    setNewBlogAuthor("");
-    setNewBlogUrl("");
+    addBlog(newBlog.title, newBlog.author, newBlog.url);
+    setNewBlog({ title: "", author: "", url: "" });
   };
 
   return (
@@ -42,33 +22,33 @@ const CreateForm = forwardRef((props, ref) => {
           title:
           <input
             type="text"
-            value={newBlogTitle}
-            name="Title"
-            onChange={({ target }) => setNewBlogTitle(target.value)}
+            value={newBlog.title}
+            name="title"
+            onChange={handleFieldChange}
           />
         </div>
         <div>
           author:
           <input
             type="text"
-            value={newBlogAuthor}
-            name="Author"
-            onChange={({ target }) => setNewBlogAuthor(target.value)}
+            value={newBlog.author}
+            name="author"
+            onChange={handleFieldChange}
           />
         </div>
         <div>
           url:
           <input
             type="text"
-            value={newBlogUrl}
-            name="URL"
-            onChange={({ target }) => setNewBlogUrl(target.value)}
+            value={newBlog.url}
+            name="url"
+            onChange={handleFieldChange}
           />
         </div>
         <button type="submit">create</button>
       </form>
     </div>
   );
-});
+};
 
 export default CreateForm;

@@ -1,7 +1,6 @@
-import blogService from "../services/blogs";
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleDelete, handleUpvote }) => {
   const [visible, setVisible] = useState(false);
 
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -18,19 +17,6 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
-  const handleUpvote = async (id) => {
-    const putRequest = {
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    };
-
-    console.log("id", id);
-
-    blogService.update(id, putRequest);
-  };
-
   return (
     <div style={blogStyle}>
       <div>
@@ -43,8 +29,13 @@ const Blog = ({ blog }) => {
         <p>{blog.url}</p>
         <p>
           {`likes ${blog.likes}`}{" "}
-          <button type="submit" onClick={() => handleUpvote(blog.id)}>
+          <button type="submit" onClick={() => handleUpvote(blog.id, blog)}>
             like
+          </button>
+        </p>
+        <p>
+          <button type="submit" onClick={() => handleDelete(blog)}>
+            remove
           </button>
         </p>
       </div>

@@ -15,11 +15,9 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    if (user !== null) {
-      blogService.getAll().then((blogs) => setBlogs(blogs));
-      console.log("loop 1");
-    }
-  }, [user]);
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+    console.log("loop 1");
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -54,6 +52,44 @@ const App = () => {
   const handleLogout = (event) => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
+  };
+
+  const addBlog = async (title, author, url) => {
+    blogFormRef.current.toggleVisibility();
+    const blog = await blogService.create({
+      title,
+      author,
+      url,
+    });
+    setBlogs(blogs.concat(blog));
+    setErrorMessage(`a new blog ${title} by ${author} added`);
+  };
+
+  const handleUpvote = async (id, blog) => {
+    const putRequest = {
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    };
+
+    const response = await blogService.update(id, putRequest);
+
+    const newBlogs = blogs.map((blog) => (blog.id === id ? response : blog));
+
+    setBlogs(newBlogs);
+  };
+
+  const handleDelete = async (blogToDelete) => {
+    if (
+      window.confirm(
+        `Remove blog ${blogToDelete.title} by ${blogToDelete.author}?`
+      )
+    ) {
+      await blogService.remove(blogToDelete.id);
+      const updatedBlogs = blogs.filter((blog) => blog.id !== blogToDelete.id);
+      setBlogs(updatedBlogs);
+    }
   };
 
   const loginForm = () => (
@@ -100,17 +136,18 @@ const App = () => {
       </p>
       <div>
         <Togglable buttonLabel="new blog" ref={blogFormRef}>
-          <CreateForm
-            setBlogs={setBlogs}
-            setErrorMessage={setErrorMessage}
-            ref={blogFormRef}
-          ></CreateForm>
+          <CreateForm addBlog={addBlog}></CreateForm>
         </Togglable>
       </div>
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog, user) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleDelete={handleDelete}
+            handleUpvote={handleUpvote}
+          />
         ))}
     </div>
   );
