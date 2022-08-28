@@ -47,7 +47,6 @@ const Blog = ({ blog }) => {
             like
           </button>
         </p>
-        {/* <p>{user.name}</p> */}
       </div>
     </div>
   );
