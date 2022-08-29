@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import CreateForm from "./components/CreateForm";
@@ -47,7 +48,7 @@ const App = () => {
     }
   };
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
   };

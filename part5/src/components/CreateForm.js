@@ -1,4 +1,6 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const CreateForm = ({ addBlog }) => {
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
@@ -49,6 +51,10 @@ const CreateForm = ({ addBlog }) => {
       </form>
     </div>
   );
+};
+
+CreateForm.propTypes = {
+  addBlog: PropTypes.func.isRequired,
 };
 
 export default CreateForm;
