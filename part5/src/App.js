@@ -16,7 +16,6 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
-    console.log("loop 1");
   }, []);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      console.log("loop 2");
       blogService.setToken(user.token);
     }
   }, []);
@@ -141,12 +139,13 @@ const App = () => {
       </div>
       {blogs
         .sort((a, b) => b.likes - a.likes)
-        .map((blog, user) => (
+        .map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
             handleDelete={handleDelete}
             handleUpvote={handleUpvote}
+            username={user.username}
           />
         ))}
     </div>
