@@ -22,14 +22,14 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
   const blogUsername = blog.user.username;
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div>
         {blog.title} - {blog.author}
         <button type="submit" onClick={toggleVisibility}>
           {visible ? "hide" : "view"}
         </button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="togglableContent">
         <p>{blog.url}</p>
         <p>
           {`likes ${blog.likes}`}{" "}

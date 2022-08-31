@@ -14,6 +14,14 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "jest"],
+  overrides: [
+    {
+      files: ["**/*.test.js", "**/*.test.jsx"],
+      env: {
+        jest: true,
+      },
+    },
+  ],
   rules: {
     indent: ["error", 2],
     "linebreak-style": ["error", "unix"],
