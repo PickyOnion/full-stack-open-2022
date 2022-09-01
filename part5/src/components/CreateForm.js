@@ -26,6 +26,7 @@ const CreateForm = ({ addBlog }) => {
             type="text"
             value={newBlog.title}
             name="title"
+            placeholder="title"
             onChange={handleFieldChange}
           />
         </div>
@@ -35,6 +36,7 @@ const CreateForm = ({ addBlog }) => {
             type="text"
             value={newBlog.author}
             name="author"
+            placeholder="author"
             onChange={handleFieldChange}
           />
         </div>
@@ -44,6 +46,7 @@ const CreateForm = ({ addBlog }) => {
             type="text"
             value={newBlog.url}
             name="url"
+            placeholder="url"
             onChange={handleFieldChange}
           />
         </div>

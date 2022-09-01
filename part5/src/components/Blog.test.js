@@ -6,6 +6,7 @@ import Blog from "./Blog";
 
 describe("<Blog />", () => {
   let container;
+  const mockHandler = jest.fn();
 
   beforeEach(() => {
     const blog = {
@@ -21,19 +22,11 @@ describe("<Blog />", () => {
       id: "62f68fba6f044724f348d846",
     };
 
-    const handleDelete = () => {
-      console.log("first");
-    };
-
-    const handleUpvote = () => {
-      console.log("Second");
-    };
-
     container = render(
       <Blog
         blog={blog}
-        handleDelete={handleDelete}
-        handleUpvote={handleUpvote}
+        handleDelete={mockHandler}
+        handleUpvote={mockHandler}
         username={"MrEgger"}
       />
     ).container;
@@ -59,5 +52,15 @@ describe("<Blog />", () => {
     expect(url).toBeDefined();
     const likes = await screen.getByText("likes 31");
     expect(likes).toBeDefined();
+  });
+
+  test("like button is clicked twice, mock function called twice", async () => {
+    const user = userEvent.setup();
+    const viewButton = await screen.getByText("view");
+    await user.click(viewButton);
+    const likeButton = await screen.getByText("like");
+    await user.click(likeButton);
+    await user.click(likeButton);
+    expect(mockHandler.mock.calls).toHaveLength(2);
   });
 });
