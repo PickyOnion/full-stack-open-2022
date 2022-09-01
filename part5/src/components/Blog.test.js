@@ -1,6 +1,7 @@
 import { React } from "react";
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
 
 describe("<Blog />", () => {
@@ -10,8 +11,8 @@ describe("<Blog />", () => {
     const blog = {
       title: "Hello",
       author: "nico",
-      url: "asdas",
-      likes: 0,
+      url: "nico.com",
+      likes: 31,
       user: {
         username: "MrEgger",
         name: "Eggy Egg",
@@ -43,8 +44,20 @@ describe("<Blog />", () => {
     expect(authorTitle).toBeDefined();
   });
 
-  test("url & likes are hidden", () => {
+  test("url & likes are hidden at start", () => {
     const div = container.querySelector(".togglableContent");
     expect(div).toHaveStyle("display: none");
+  });
+
+  test("blog's url and number of likes are shown when clicked", async () => {
+    const user = userEvent.setup();
+    const button = await screen.getByText("view");
+    await user.click(button);
+    const div = container.querySelector(".togglableContent");
+    expect(div).toHaveStyle("display: block");
+    const url = await screen.getByText("nico.com");
+    expect(url).toBeDefined();
+    const likes = await screen.getByText("likes 31");
+    expect(likes).toBeDefined();
   });
 });
