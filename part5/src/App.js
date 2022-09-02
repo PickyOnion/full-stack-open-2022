@@ -133,7 +133,7 @@ const App = () => {
       <Notification message={errorMessage} />
       <p>
         {`${user.name} logged in`}
-        <button type="submit" onClick={handleLogout}>
+        <button type="submit" id="logout-button" onClick={handleLogout}>
           logout
         </button>
       </p>
