@@ -88,7 +88,6 @@ describe("Blog app", function () {
         cy.get("#author").type("MrEgger");
         cy.get("#url").type("www.egg.com");
         cy.get("#button-create").click();
-        // cy.reload(true);
         cy.contains("Cypress test - MrEgger");
       });
     });
