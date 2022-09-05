@@ -19,8 +19,6 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
     marginBottom: 5,
   };
 
-  const blogUsername = blog.user.username;
-
   return (
     <div style={blogStyle} className="blog">
       <div>
@@ -38,7 +36,7 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
           </button>
         </p>
         <p>
-          {blogUsername === username && (
+          {blog.user.username === username && (
             <button type="submit" onClick={() => handleDelete(blog)}>
               remove
             </button>

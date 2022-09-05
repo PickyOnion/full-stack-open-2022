@@ -15,29 +15,43 @@ const unknownEndpoint = (request, response) => {
 };
 
 const tokenExtractor = (request, response, next) => {
+  console.log("tokenExtractor");
   const authorization = request.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     request.token = authorization.substring(7);
   }
+  console.log("request.token", request.token);
   next();
 };
 
-const userExtractor = async (request, response, next) => {
-  console.log("userExtractor");
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  console.log("decodedToken", decodedToken);
+// const userExtractor = async (request, response, next) => {
+//   console.log("userExtractor");
+//   const decodedToken = jwt.verify(request.token, process.env.SECRET);
+//   console.log("decodedToken", decodedToken);
 
-  if (!request.token) {
-    return response.status(401).json({ error: "token missing" });
-  } else if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
+//   if (!request.token) {
+//     return response.status(401).json({ error: "token missing" });
+//   } else if (!decodedToken.id) {
+//     return response.status(401).json({ error: "token invalid" });
+//   }
+
+//   const user = await User.findById(decodedToken.id);
+//   console.log("user", user);
+
+//   request.user = user;
+//   return next();
+// };
+
+const userExtractor = async (request, response, next) => {
+  const token = request.token;
+  console.log("token", token);
+  if (token) {
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    const user = await User.findById(decodedToken.id);
+    request.user = user;
   }
 
-  const user = await User.findById(decodedToken.id);
-  console.log("user", user);
-
-  request.user = user;
-  return next();
+  next();
 };
 
 const errorHandler = (error, request, response, next) => {

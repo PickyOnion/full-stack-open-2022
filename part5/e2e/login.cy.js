@@ -42,4 +42,55 @@ describe("Blog app", function () {
       cy.get("html").should("not.contain", "Eggy Egg logged in");
     });
   });
+
+  describe("Blog app", function () {
+    // ...
+
+    describe("When logged in", function () {
+      beforeEach(function () {
+        cy.request({
+          method: "POST",
+          url: "http://localhost:3003/api/login",
+          body: {
+            username: "MrEgger",
+            password: "nicolas",
+          },
+        }).then((response) => {
+          localStorage.setItem(
+            "loggedBlogappUser",
+            JSON.stringify(response.body)
+          );
+          cy.visit("http://localhost:3000");
+        });
+      });
+
+      it("A blog exists", function () {
+        cy.request({
+          url: "http://localhost:3003/api/blogs",
+          method: "POST",
+          body: {
+            title: "Cypress HTTP POST test",
+            author: "MrEgger",
+            url: "www.egg.com",
+            likes: 4,
+          },
+          headers: {
+            Authorization: `bearer ${
+              JSON.parse(localStorage.getItem("loggedBlogappUser")).token
+            }`,
+          },
+        });
+      });
+
+      it("A blog can be created", function () {
+        cy.get("#button-new-blog").click();
+        cy.get("#title").type("Cypress test");
+        cy.get("#author").type("MrEgger");
+        cy.get("#url").type("www.egg.com");
+        cy.get("#button-create").click();
+        // cy.reload(true);
+        cy.contains("Cypress test - MrEgger");
+      });
+    });
+  });
 });

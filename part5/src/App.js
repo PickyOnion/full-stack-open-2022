@@ -60,6 +60,7 @@ const App = () => {
       author,
       url,
     });
+    console.log("addblog", blog);
     setBlogs(blogs.concat(blog));
     setErrorMessage(`a new blog ${title} by ${author} added`);
   };
