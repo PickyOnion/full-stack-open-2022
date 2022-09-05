@@ -41,7 +41,11 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
         </p>
         <p>
           {blog.user.username === username && (
-            <button type="submit" onClick={() => handleDelete(blog)}>
+            <button
+              type="submit"
+              id="button-delete"
+              onClick={() => handleDelete(blog)}
+            >
               remove
             </button>
           )}

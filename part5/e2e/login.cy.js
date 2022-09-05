@@ -101,6 +101,17 @@ describe("Blog app", function () {
         cy.get("#button-like").click();
         cy.contains("likes 1");
       });
+
+      it("A blog can be deleted", function () {
+        cy.get("#button-new-blog").click();
+        cy.get("#title").type("Cypress test");
+        cy.get("#author").type("MrEgger");
+        cy.get("#url").type("www.egg.com");
+        cy.get("#button-create").click();
+        cy.get("#button-view").click();
+        cy.get("#button-delete").click();
+        cy.contains("Cypress test - MrEgger").should("not.exist");
+      });
     });
   });
 });
