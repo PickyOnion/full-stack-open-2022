@@ -23,7 +23,7 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
     <div style={blogStyle} className="blog">
       <div>
         {blog.title} - {blog.author}
-        <button type="submit" onClick={toggleVisibility}>
+        <button type="submit" onClick={toggleVisibility} id="button-view">
           {visible ? "hide" : "view"}
         </button>
       </div>
@@ -31,7 +31,11 @@ const Blog = ({ blog, handleDelete, handleUpvote, username }) => {
         <p>{blog.url}</p>
         <p>
           {`likes ${blog.likes}`}{" "}
-          <button type="submit" onClick={() => handleUpvote(blog.id, blog)}>
+          <button
+            type="submit"
+            id="button-like"
+            onClick={() => handleUpvote(blog.id, blog)}
+          >
             like
           </button>
         </p>
