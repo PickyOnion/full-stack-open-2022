@@ -112,6 +112,67 @@ describe("Blog app", function () {
         cy.get("#button-delete").click();
         cy.contains("Cypress test - MrEgger").should("not.exist");
       });
+
+      it("Blogs are ordered by the most likes", function () {
+        cy.request({
+          url: "http://localhost:3003/api/blogs",
+          method: "POST",
+          body: {
+            title: "The title with the second most likes",
+            author: "MrEgger",
+            url: "www.egg.com",
+            likes: 10,
+          },
+          headers: {
+            Authorization: `bearer ${
+              JSON.parse(localStorage.getItem("loggedBlogappUser")).token
+            }`,
+          },
+        })
+          .then(() => {
+            cy.request({
+              url: "http://localhost:3003/api/blogs",
+              method: "POST",
+              body: {
+                title: "The title with the most likes",
+                author: "MrEgger",
+                url: "www.egg.com",
+                likes: 50,
+              },
+              headers: {
+                Authorization: `bearer ${
+                  JSON.parse(localStorage.getItem("loggedBlogappUser")).token
+                }`,
+              },
+            });
+          })
+          .then(() => {
+            cy.request({
+              url: "http://localhost:3003/api/blogs",
+              method: "POST",
+              body: {
+                title: "The title with the least likes",
+                author: "MrEgger",
+                url: "www.egg.com",
+                likes: 1,
+              },
+              headers: {
+                Authorization: `bearer ${
+                  JSON.parse(localStorage.getItem("loggedBlogappUser")).token
+                }`,
+              },
+            });
+          });
+
+        cy.visit("http://localhost:3000");
+
+        cy.get(".blog")
+          .eq(0)
+          .should("contain", "The title with the most likes");
+        cy.get(".blog")
+          .eq(1)
+          .should("contain", "The title with the second most likes");
+      });
     });
   });
 });
