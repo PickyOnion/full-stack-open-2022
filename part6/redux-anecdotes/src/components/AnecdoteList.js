@@ -12,6 +12,7 @@ const AnecdoteList = () => {
       anecdote.content.includes(activeFilter)
     )
   );
+
   const dispatch = useDispatch();
 
   const vote = (anecdote) => {

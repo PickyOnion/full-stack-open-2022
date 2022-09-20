@@ -10,12 +10,10 @@ const anecdoteSlice = createSlice({
       const content = action.payload;
       state.push({
         content,
-        id: getId(),
         votes: 0,
       });
     },
     voteAnecdote(state, action) {
-      console.log("action", action);
       const votedAnecdote = state.find(
         (anecdote) => anecdote.id === action.payload
       );
