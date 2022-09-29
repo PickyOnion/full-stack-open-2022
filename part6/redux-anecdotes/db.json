@@ -34,6 +34,11 @@
       "content": "testAnecdote",
       "votes": 0,
       "id": "ZVuR4Gb"
+    },
+    {
+      "content": "test thunk",
+      "votes": 0,
+      "id": "WvPdFEF"
     }
   ]
 }

@@ -48,4 +48,11 @@ export const initializeAnecdotes = () => {
   };
 };
 
+export const createNote = (content) => {
+  return async (dispatch) => {
+    const newNote = await anecdoteService.createNew(content);
+    dispatch(appendAnecdote(newNote));
+  };
+};
+
 export default anecdoteSlice.reducer;
