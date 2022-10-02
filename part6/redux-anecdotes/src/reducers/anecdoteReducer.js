@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import anecdoteService from "../services/anecdotes";
+import { setEasyNotification } from "./notificationReducer";
 
 export const getId = () => (100000 * Math.random()).toFixed(0);
 
@@ -45,6 +46,7 @@ export const createAnecdote = (content) => {
   return async (dispatch) => {
     const newNote = await anecdoteService.createNew(content);
     dispatch(appendAnecdote(newNote));
+    dispatch(setEasyNotification(`new anecdote '${content}'`, 5));
   };
 };
 
@@ -54,6 +56,7 @@ export const upvoteAnecdote = (anecdote) => {
     const votedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
     await anecdoteService.update(anecdote.id, votedAnecdote);
     dispatch(voteAnecdote(anecdote));
+    dispatch(setEasyNotification(`you voted '${anecdote.content}'`, 5));
   };
 };
 

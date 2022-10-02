@@ -11,14 +11,8 @@ const Notification = () => {
 
   if (notification.length === 0) {
     return;
-  }
-
-  if (notification[0].type === "vote") {
-    return <div style={style}>{`You upvoted '${notification[0].title}'`}</div>;
-  }
-
-  if (notification[0].type === "create") {
-    return <div style={style}>{`You created '${notification[0].title}'`}</div>;
+  } else {
+    return <div style={style}>{notification[0]}</div>;
   }
 };
 
