@@ -17,8 +17,6 @@ const AnecdoteList = () => {
 
   const vote = (anecdote) => {
     dispatch(upvoteAnecdote(anecdote));
-    // dispatch(deleteNotification());
-    // dispatch(setNotification({ type: "vote", title: anecdote.content }));
   };
 
   return anecdotes.map((anecdote) => (
