@@ -1,9 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { upvoteAnecdote } from "../reducers/anecdoteReducer";
-import {
-  setNotification,
-  deleteNotification,
-} from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
   const activeFilter = useSelector((state) => state.filter.filter);

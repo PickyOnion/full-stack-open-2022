@@ -9,7 +9,6 @@ const notificationSlice = createSlice({
     setNotification(state, action) {
       state.push(action.payload);
       console.log("action.payload", action.payload);
-      console.log("state.notification", state.notification);
     },
     deleteNotification: () => initialState,
   },
