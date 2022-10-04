@@ -1,14 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = {};
 
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
     setNotification(state, action) {
-      state.push(action.payload);
       console.log("action.payload", action.payload);
+      if (state.timer) {
+        clearTimeout(state.timer);
+      }
+      state.message = action.payload.message;
+      state.visible = true;
+      state.timer = action.payload.timer;
     },
     deleteNotification: () => initialState,
   },
@@ -16,10 +21,12 @@ const notificationSlice = createSlice({
 
 export const setEasyNotification = (message, time) => {
   return (dispatch) => {
-    dispatch(setNotification(message));
-    setTimeout(() => {
-      dispatch(deleteNotification());
-    }, time * 1000);
+    const timer = setTimeout(() => dispatch(deleteNotification()), time * 1000);
+    const notification = {
+      message: message,
+      timer: timer,
+    };
+    dispatch(setNotification(notification));
   };
 };
 

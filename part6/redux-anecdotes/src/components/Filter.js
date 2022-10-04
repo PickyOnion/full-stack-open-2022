@@ -20,8 +20,6 @@ const mapDispatchToProps = {
   setFilter,
 };
 
-// mapstatetoprops must be done in the file using this
-
 const ConnectedFilter = connect(null, mapDispatchToProps)(Filter);
 
 export default ConnectedFilter;

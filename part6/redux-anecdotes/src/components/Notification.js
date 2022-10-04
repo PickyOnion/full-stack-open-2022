@@ -8,10 +8,10 @@ const Notification = (props) => {
     borderWidth: 1,
   };
 
-  if (props.notification.length === 0) {
+  if (Object.keys(props.notification).length === 0) {
     return;
   } else {
-    return <div style={style}>{props.notification[0]}</div>;
+    return <div style={style}>{props.notification.message}</div>;
   }
 };
 
